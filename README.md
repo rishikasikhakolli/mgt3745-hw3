@@ -20,7 +20,7 @@ The **Photo Review & Travel Logging App** provides casual travelers with a low-p
      Record: macOS Cmd+Shift+5, Windows Win+Alt+R or Snipping Tool video. Convert at ezgif.com.
      Markdown image syntax: -->
 The gif shows a demonstration of a user reviewing a location they visited while including the name of the place and an image and then saving that entry. It then goes into the feed below of previous entries too.
-![Saving an entry and seeing it appear](docs/demo.gif)
+![Saving an entry and seeing it appear](docs/README.md)
 
 <!-- HTML gives you sizing control markdown does not: -->
 <!-- <img src="docs/screenshot.png" width="480" alt="The entry list after three saves"> -->
