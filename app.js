@@ -1,90 +1,123 @@
-(() => {
-  'use strict';
+const reviewForm = document.getElementById('review-form');
+const spotNameInput = document.getElementById('spot-name');
+const spotImageInput = document.getElementById('spot-image');
+const imagePreviewContainer = document.getElementById('image-preview-container');
+const imagePreview = document.getElementById('image-preview');
+const reviewTextInput = document.getElementById('review-text');
+const saveStatus = document.getElementById('save-status');
+const emptyState = document.getElementById('empty-state');
+const reviewsList = document.getElementById('reviews-list');
 
-  const storageKey = 'mgt3745.notes.v617';
-  const noteForm = document.querySelector('#note-form');
-  const noteInput = document.querySelector('#note-input');
-  const noteList = document.querySelector('#note-list');
-  const noteError = document.querySelector('#note-error');
-  const saveStatus = document.querySelector('#save-status');
-  const emptyState = document.querySelector('#empty-state');
-  // The query switch enables a repeatable classroom failure without filling real storage.
-  const simulateFailedSave = new URLSearchParams(window.location.search).has('failSave');
-  let notes = loadNotes();
+const STORAGE_KEY = 'beli_photo_reviews';
+let currentBase64Image = '';
 
-  function loadNotes() {
-    try {
-      const storedText = window.localStorage.getItem(storageKey);
-      const parsed = storedText === null ? [] : JSON.parse(storedText);
-      if (!Array.isArray(parsed) || parsed.some(note => typeof note !== 'string')) {
-        throw new Error('Unexpected stored data');
-      }
-      return parsed;
-    } catch {
-      saveStatus.textContent = 'Saved notes could not be read. Original storage was left unchanged. A successful new save will replace it.';
-      return [];
-    }
+function loadReviews() {
+  const savedData = localStorage.getItem(STORAGE_KEY);
+  return savedData ? JSON.parse(savedData) : [];
+}
+
+function saveReviewsToStorage(reviews) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(reviews));
+}
+
+function renderReviews() {
+  reviewsList.textContent = '';
+  const reviews = loadReviews();
+
+  if (reviews.length === 0) {
+    emptyState.classList.remove('hidden');
+    return;
   }
 
-  function saveNotes(nextNotes) {
-    try {
-      if (simulateFailedSave) throw new Error('Simulated write failure');
-      // Persist the proposed state before changing the visible state or clearing input.
-      window.localStorage.setItem(storageKey, JSON.stringify(nextNotes));
-      return true;
-    } catch {
-      noteError.textContent = 'Could not save. Your text is still here. Try again when storage is available.';
-      saveStatus.textContent = '';
-      return false;
-    }
-  }
+  emptyState.classList.add('hidden');
 
-  function renderNotes() {
-    noteList.replaceChildren();
-    emptyState.hidden = notes.length > 0;
-    notes.forEach((note, index) => {
-      const listItem = document.createElement('li');
-      const noteText = document.createElement('span');
-      noteText.textContent = note;
-      const deleteButton = document.createElement('button');
-      deleteButton.type = 'button';
-      deleteButton.textContent = 'Delete';
-      deleteButton.setAttribute('aria-label', `Delete note ${index + 1}: ${note}`);
-      deleteButton.addEventListener('click', () => {
-        const nextNotes = notes.filter((entry, entryIndex) => entryIndex !== index);
-        if (!saveNotes(nextNotes)) return;
-        notes = nextNotes;
-        noteError.textContent = '';
-        renderNotes();
-        saveStatus.textContent = 'Note deleted.';
-        noteInput.focus();
-      });
-      listItem.append(noteText, deleteButton);
-      noteList.append(listItem);
-    });
-  }
+  reviews.forEach((review) => {
+    const card = document.createElement('li');
+    card.className = 'review-card';
 
-  noteForm.addEventListener('submit', event => {
-    event.preventDefault();
-    const candidate = noteInput.value.trim();
-    const characterCount = Array.from(candidate).length;
-    if (characterCount < 1 || characterCount > 200) {
-      noteError.textContent = 'Enter a note containing 1–200 characters.';
-      noteInput.setAttribute('aria-invalid', 'true');
-      saveStatus.textContent = '';
-      noteInput.focus();
-      return;
-    }
-    noteInput.removeAttribute('aria-invalid');
-    noteError.textContent = '';
-    const nextNotes = [...notes, candidate];
-    if (!saveNotes(nextNotes)) return;
-    notes = nextNotes;
-    renderNotes();
-    noteInput.value = '';
-    noteInput.focus();
-    saveStatus.textContent = 'Note saved in this browser.';
+    const title = document.createElement('h3');
+    title.className = 'review-card-title';
+    title.textContent = review.spotName;
+
+    const img = document.createElement('img');
+    img.className = 'review-card-img';
+    img.src = review.imageData;
+    img.alt = `Photo of ${review.spotName}`;
+
+    const text = document.createElement('p');
+    text.className = 'review-card-text';
+    text.textContent = review.reviewText;
+
+    card.appendChild(title);
+    card.appendChild(img);
+    card.appendChild(text);
+
+    reviewsList.appendChild(card);
   });
+}
 
-  renderNotes();
-})();
+function showStatus(message, isSuccess) {
+  saveStatus.textContent = message;
+  saveStatus.className = isSuccess ? 'success' : 'error';
+  saveStatus.classList.remove('hidden');
+
+  setTimeout(() => {
+    saveStatus.classList.add('hidden');
+  }, 3000);
+}
+
+spotImageInput.addEventListener('change', (event) => {
+  const file = event.target.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      currentBase64Image = e.target.result;
+      imagePreview.src = currentBase64Image;
+      imagePreviewContainer.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+  } else {
+    currentBase64Image = '';
+    imagePreviewContainer.classList.add('hidden');
+  }
+});
+
+reviewForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const spotName = spotNameInput.value.trim();
+  const reviewText = reviewTextInput.value.trim();
+
+  if (!spotName || !currentBase64Image || !reviewText) {
+    showStatus('Please provide a spot name, select an image, and write a review.', false);
+    return;
+  }
+
+  const newReview = {
+    id: Date.now(),
+    spotName: spotName,
+    imageData: currentBase64Image,
+    reviewText: reviewText,
+    createdAt: new Date().toISOString()
+  };
+
+  try {
+    const reviews = loadReviews();
+    reviews.unshift(newReview);
+    saveReviewsToStorage(reviews);
+
+    spotNameInput.value = '';
+    spotImageInput.value = '';
+    reviewTextInput.value = '';
+    currentBase64Image = '';
+    imagePreviewContainer.classList.add('hidden');
+
+    showStatus('Photo review saved successfully!', true);
+    renderReviews();
+  } catch (error) {
+    showStatus('Failed to save review. The photo file may be too large.', false);
+  }
+});
+
+renderReviews();
