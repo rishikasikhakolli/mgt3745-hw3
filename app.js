@@ -8,7 +8,7 @@ const saveStatus = document.getElementById('save-status');
 const emptyState = document.getElementById('empty-state');
 const reviewsList = document.getElementById('reviews-list');
 
-const STORAGE_KEY = 'beli_photo_reviews';
+const STORAGE_KEY = 'travlr_photo_reviews';
 let currentBase64Image = '';
 
 function loadReviews() {
