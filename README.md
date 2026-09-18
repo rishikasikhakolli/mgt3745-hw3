@@ -98,8 +98,6 @@ The scaffold has **eleven canonical files in `/context`: six active files above 
 
 Root README.md and the two instruction adapters—[CLAUDE.md](CLAUDE.md) and [.github/copilot-instructions.md](.github/copilot-instructions.md)—are additional files. Copy your HW2 USERS.md and FEATURES.md into `/context` and revise them using instructor feedback if available; otherwise record a peer criterion check and mark instructor feedback pending. Run `node scripts/check-scaffold.mjs` to check required file presence; this does not assess content quality.
 
-## AI Use
-
 <!-- A Delegation Decision Record without the name. From HW5 this becomes a formal DDR. -->
 ## AI Use
 
@@ -116,7 +114,11 @@ Root README.md and the two instruction adapters—[CLAUDE.md](CLAUDE.md) and [.g
 **Actual hours on this assignment:** If I were to guess, it was probably around 10 hours total across 4 days.
 
 ## Explain, Change, Verify
-```reviewForm.addEventListener('submit', (event) => {
+
+### Code Snippet (`app.js`)
+
+```javascript
+reviewForm.addEventListener('submit', (event) => {
   event.preventDefault();
 
   const spotName = spotNameInput.value.trim();
@@ -153,9 +155,9 @@ Root README.md and the two instruction adapters—[CLAUDE.md](CLAUDE.md) and [.g
   }
 });
 
-renderReviews();```
+renderReviews();
+```
 
-[Identify one function and explain its input, state changes, and output in your own words. Link a meaningful before/after code change, state its expected effect, and record the observed behavior and evidence. Explain why the change matters to your selected requirement. This paragraph is part of the existing README submission.]
 
 **Input:** The form submission `event` triggered by clicking `#submit-btn`, along with string values extracted from `#spot-name`, `#review-text`, and the image.
 
@@ -163,7 +165,8 @@ renderReviews();```
 
 **Output:** Halts execution when inputs are missing or invalid; returns `undefined` after updating storage and UI state.
 
-```reviewForm.addEventListener('submit', (event) => {
+```
+reviewForm.addEventListener('submit', (event) => {
   event.preventDefault();
 
   const spotName = spotNameInput.value;
@@ -188,7 +191,8 @@ renderReviews();```
   imagePreviewContainer.classList.add('hidden');
 
   renderReviews();
-});```
+});
+```
 
 **Before / After Change:** Originally, form submission attempted to save review objects without checking if required text fields or images were empty, resulting in blank review cards in `localStorage`. I added the explicit `if (!spotName || !currentBase64Image || !reviewText)` guard clause alongside a `try...catch` block surrounding `saveReviewsToStorage()`.
 
