@@ -65,7 +65,7 @@ When the page opens, loadReviews reads the stored array from localStorage and re
 ## Status
 | Area | State | Evidence |
 |------|-------|----------|
-| Save and render photo review | Works | Visual Proof: [`docs/readme.md`](docs/readme.md) \| Code: [`app.js#L21`](app.js#L21) |
+| Save and render photo review | Works | Visual Proof: [`docs/readme.md`](docs/README.md) \| Code: [`app.js#L21`](app.js#L21) |
 | Live image preview | Works | Visual Proof: [`docs/readme.md`](docs/readme.md) \| Code: [`app.js#L66`](app.js#L66) |
 | Data persistence across reload | Works | Visual Proof: [`docs/readme.md`](docs/readme.md) \| Code: [`app.js#L13`](app.js#L13) |
 | Empty input validation | Works | Verified via [`app.js#L86`](app.js#L86) |
