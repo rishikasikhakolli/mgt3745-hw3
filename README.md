@@ -63,15 +63,14 @@ flowchart TD
 When the page opens, loadReviews reads the stored array from localStorage and renderReviews draws the cards safely using textContent for user string inputs. When an image file is selected, FileReader converts the file to a Base64 Data URL to generate a live preview. Upon form submission, input validation checks for empty fields before pushing the new review into the local state array and writing to localStorage.
 
 ## Status
-
 | Area | State | Evidence |
 |------|-------|----------|
-| Save and render photo review | Works | Visual Proof: [`docs/demo.gif`](docs/demo.gif) \| Code: [`app.js#L21`](app.js#L21) |
-| Live image preview | Works | Visual Proof: [`docs/demo.gif`](docs/demo.gif) \| Code: [`app.js#L66`](app.js#L66) |
-| Data persistence across reload | Works | Visual Proof: [`docs/demo.gif`](docs/demo.gif) \| Code: [`app.js#L13`](app.js#L13) |
+| Save and render photo review | Works | Visual Proof: [`docs/readme.md`](docs/readme.md) \| Code: [`app.js#L21`](app.js#L21) |
+| Live image preview | Works | Visual Proof: [`docs/readme.md`](docs/readme.md) \| Code: [`app.js#L66`](app.js#L66) |
+| Data persistence across reload | Works | Visual Proof: [`docs/readme.md`](docs/readme.md) \| Code: [`app.js#L13`](app.js#L13) |
 | Empty input validation | Works | Verified via [`app.js#L86`](app.js#L86) |
 | Large file quota limit handling | Failed | Verified via [`app.js#L113`](app.js#L113) |
-| Multi-device cloud sync | Deferred | Postponed to backend phase per [`ADR-001.md`](context/ADR-001.md) |
+| Multi-device cloud sync | Deferred | Postponed to backend phase |
 
 
 <details>
