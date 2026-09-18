@@ -4,11 +4,6 @@
 ![Status](https://img.shields.io/badge/status-in%20progress-yellow)
 ![Module](https://img.shields.io/badge/MGT%203745-HW3-051E39)
 
-> HW3, MGT 3745 O. Replace every [bracketed prompt] with your own writing.
-> Lines between `<!--` and `-->` are notes to you. They are invisible on GitHub. Delete them when done.
-> This README is the first thing an employer, a teammate, or an agent reads. It makes
-> a case for the repository. Show, then tell.
-
 ## Reviews
 
 The **Photo Review & Travel Logging App** provides casual travelers with a low-pressure environment to document spot reviews with images, custom ratings, and descriptive text without relying on external cloud dependencies. This repository implements the core **Category Photo Review & Ranking** feature specified in [FEATURES.md](context/FEATURES.md) to address the user personas detailed in [PROJECT.md](context/PROJECT.md).
